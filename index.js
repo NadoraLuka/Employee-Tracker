@@ -109,29 +109,23 @@ async function viewAllDepartments() {
 async function viewAllEmployees() {
     console.log("");
 
-    // SELECT * FROM employee;
+
     let query = "SELECT * FROM employee";
     const rows = await db.query(query);
     console.table(rows);
 }
 
 async function viewAllEmployeesByDepartment() {
-    // View all employees by department
-    // SELECT first_name, last_name, department.name FROM ((employee INNER JOIN role ON role_id = role.id) INNER JOIN department ON department_id = department.id);
+
     console.log("");
     let query = "SELECT first_name, last_name, department.name FROM ((employee INNER JOIN role ON role_id = role.id) INNER JOIN department ON department_id = department.id);";
     const rows = await db.query(query);
     console.table(rows);
 }
 
-// Will return an array with only two elements in it: 
-// [first_name, last_name]
+
 function getFirstAndLastName(fullName) {
-    // If a person has a space in their first name, such as "Mary Kay", 
-    // then first_name needs to ignore that first space. 
-    // Surnames generally do not have spaces in them so count the number
-    // of elements in the array after the split and merge all before the last
-    // element.
+
     let employee = fullName.split(" ");
     if (employee.length == 2) {
         return employee;
@@ -146,9 +140,7 @@ function getFirstAndLastName(fullName) {
 }
 
 async function updateEmployeeRole(employeeInfo) {
-    // Given the name of the role, what is the role id?
-    // Given the full name of the employee, what is their first_name and last_name?
-    // UPDATE employee SET role_id=1 WHERE employee.first_name='Mary Kay' AND employee.last_name='Ash';
+
     const roleId = await getRoleId(employeeInfo.role);
     const employee = getFirstAndLastName(employeeInfo.employeeName);
 
@@ -162,7 +154,7 @@ async function addEmployee(employeeInfo) {
     let roleId = await getRoleId(employeeInfo.role);
     let managerId = await getEmployeeId(employeeInfo.manager);
 
-    // INSERT into employee (first_name, last_name, role_id, manager_id) VALUES ("Bob", "Hope", 8, 5);
+
     let query = "INSERT into employee (first_name, last_name, role_id, manager_id) VALUES (?,?,?,?)";
     let args = [employeeInfo.first_name, employeeInfo.last_name, roleId, managerId];
     const rows = await db.query(query, args);
@@ -171,7 +163,7 @@ async function addEmployee(employeeInfo) {
 
 async function removeEmployee(employeeInfo) {
     const employeeName = getFirstAndLastName(employeeInfo.employeeName);
-    // DELETE from employee WHERE first_name="Cyrus" AND last_name="Smith";
+
     let query = "DELETE from employee WHERE first_name=? AND last_name=?";
     let args = [employeeName[0], employeeName[1]];
     const rows = await db.query(query, args);
@@ -187,7 +179,7 @@ async function addDepartment(departmentInfo) {
 }
 
 async function addRole(roleInfo) {
-    // INSERT into role (title, salary, department_id) VALUES ("Sales Manager", 100000, 1);
+
     const departmentId = await getDepartmentId(roleInfo.departmentName);
     const salary = roleInfo.salary;
     const title = roleInfo.roleName;
