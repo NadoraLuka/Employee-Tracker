@@ -1,12 +1,12 @@
 const inquirer = require("inquirer");
-let Database = require("./async-db");
-let cTable = require("console.table");
+const express = require("express");
+const mysql = require("mysql");
 
-const db = new Database({
+const db = mysql.createConnection({
     host: "localhost",
     port: 3306,
     user: "root",
-    password: "Shifting Shadows",
+    password: "",
     database: "employee_db"
 });
 
@@ -45,7 +45,7 @@ async function getDepartmentNames() {
 
     let departments = [];
     for (const row of rows) {
-        departments.push(row.name);
+        departments.push(row);
     }
 
     return departments;
